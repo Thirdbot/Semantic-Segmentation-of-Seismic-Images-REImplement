@@ -67,21 +67,18 @@ if __name__ == '__main__':
     # Batch-read all arrays from HDF5 in one shot — avoids per-sample I/O overhead
     with h5py.File(penobscot_data, 'r') as f:
         columns    = len(f['column'])
+        all_tiles = []
+        for i in range(columns):
 
-        tiles = [
-            PostStackDatum(
+            tile = PostStackDatum(
                 f['features'][i], f['label'][i],
-                Direction.INLINE if f['direction'][i] in b'inline' else Direction.CROSSLINE,
+                Direction.INLINE if f['direction'][i] == b'inline' else Direction.CROSSLINE,
                 f['line_number'][i], f['pixel_depth'][i], f['column'][i],
             )
-            for i in range(columns)
-        ]
-
-        transform_tiles = compose.apply(dataset=tiles)
-        # transformations
-
+            # transformations
+            all_tiles.extend(compose.apply(dataset=tile))
     # split train,validation
-    train_dataset, validation_dataset = split_dataset(transform_tiles, 0.3)
+    train_dataset, validation_dataset = split_dataset(all_tiles, 0.3)
 
     PostStackDataDumper.to_hdf(train_dataset, train_data.as_posix())
     PostStackDataDumper.to_hdf(validation_dataset, validate_data.as_posix())
