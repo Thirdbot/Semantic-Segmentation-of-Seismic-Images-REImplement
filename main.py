@@ -26,7 +26,7 @@ TILE_SHAPE = (128, 128)
 STRIDE_SHAPE = (64, 64)
 BATCH_SIZE = 1
 NUM_CLASSES = 8
-EPOCHS = 100
+EPOCHS = 1
 
 root = Path(__file__).parent.absolute()
 penobscot_data = root / "Penobscot Interpretation Dataset" / "dataset.h5"
