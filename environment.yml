@@ -10,7 +10,10 @@ dependencies:
 
   # Keep compiled scientific packages on conda-forge so the solver chooses the
   # right builds for Linux, macOS, and Windows.
-  - numpy>=1.26,<2
+  # rockml 0.20.0 saves optimizer variables with np.save on a list of arrays.
+  # NumPy 1.24+ raises on that inhomogeneous list, while TensorFlow 2.15
+  # supports NumPy >=1.23.5,<2.0.
+  - numpy=1.23.5
   - pandas>=2.1,<3
   - scipy>=1.11,<2
   - scikit-image>=0.22,<1
